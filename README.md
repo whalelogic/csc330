@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-# csc330
-CSC-330 course material and projects.
-=======
 # CSC 330: Software Design & Development — Spring 2026
 
 ## Team Project Proposal: Recipe Management System
-
-**Due:** 11:59pm on 03.02.2025
-
-_(No late submissions will be accepted for team assignments)_
 
 ### Upcoming Milestones
 
