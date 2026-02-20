@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Cities and Populations{% endblock %}
+
+{% block content %}
+    <h1>Cities and Populations</h1>
+    
+    <form method="POST" action="{{ url_for('cities') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            {{ form.city.label }}
+            {{ form.city(size=32) }}
+            {% if form.city.errors %}
+                <ul>
+                {% for error in form.city.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.population.label }}
+            {{ form.population(size=32) }}
+            {% if form.population.errors %}
+                <ul>
+                {% for error in form.population.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.country.label }}
+            {{ form.country(size=32) }}
+            {% if form.country.errors %}
+                <ul>
+                {% for error in form.country.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+    
+    <h2>City Population Data</h2>
+    {% if cities %}
+        <table>
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Population</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for city, info in cities.items() %}
+                <tr>
+                    <td>{{ city }}</td>
+                    <td>{{ info[0] }}</td>
+                    <td>{{ info[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No cities added yet. Use the form above to add cities.</p>
+    {% endif %}
+    
+    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+{% endblock %}

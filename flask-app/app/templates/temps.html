@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>City Temperatures</title></head>
+<body>
+    <h1 style="text-align: center;">Current temperatures in US cities</h1>
+    <ul style="font-size: 18px; color: #333; list-style-type: none; padding: 0px; text-align: center;">
+        {% for city, temp in weather_data.items() %}
+            <li>{{ city }} : {{ temp|round|int }}F</li>
+        {% endfor %}
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('home') }}" style="text-decoration: none; color: #007BFF;">Back to Home</a>
+    </div>
+</body>
+</html>
