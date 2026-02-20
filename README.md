@@ -139,4 +139,3 @@ Your proposal (2-3 pages) must address the following narrative elements:
 -   **Attribution:** Include names of all contributing team members at the top.
     
 -   **Requirement:** Every team member must submit their own copy of the PDF in Teams.
->>>>>>> d5c05bc (Uploading project documents and Flask application.)
