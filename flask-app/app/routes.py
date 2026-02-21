@@ -63,7 +63,7 @@ def init_app(app):
             population_count = form.population.data
             country_name = form.country.data
             
-            # In-memory version (uncomment for in-memory)
+            # In-memory version 
             # city_obj = City(city_name, population_count, country_name)
             # cities.append(city_obj)
             
@@ -73,10 +73,6 @@ def init_app(app):
             return redirect(url_for('population'))
         
         return render_template('population.html', form=form, title="Population Dashboard")
-
-
-
-
 
 
 

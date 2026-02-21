@@ -1,4 +1,3 @@
-// index template for flask app 
 
 {% extends "base.html" %}
 
@@ -6,6 +5,26 @@
 
 {% block content %}
     <h2>Home Page</h2>
-    <p>Welcome to the home page of my Flask app! This is where you can find the latest updates and features.</p>
-    <p>Feel free to explore the different sections of the website using the navigation menu above.</p>
+    
+    <h3>Available Routes:</h3>
+    <div style="margin: 20px 0;">
+        <h4>Weather Features</h4>
+        <ul>
+            <li><a href="{{ url_for('temps') }}">View Temperatures</a> - City temperatures</li>
+            <li><a href="{{ url_for('plot_temps') }}">Temperature Chart</a> - Temperature charts using Chart.js</li>
+        </ul>
+        
+        <h4>Population Management</h4>
+        <ul>
+            <li><a href="{{ url_for('population') }}">Add City Population</a> - Add City record</li>
+            <li><a href="{{ url_for('view_all') }}">View All Cities</a> - See all Cities</li>
+            <li><a href="{{ url_for('search') }}">Search Cities</a> - Find City</li>
+            <li><a href="{{ url_for('delete_city') }}">Delete City</a> - Delete City from record</li>
+        </ul>
+        
+        <h4>Other Features</h4>
+        <ul>
+            <li><a href="{{ url_for('fruits') }}">Random Fruit</a> - Get a random fruit</li>
+        </ul>
+    </div>
 {% endblock %}

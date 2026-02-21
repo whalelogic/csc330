@@ -6,6 +6,25 @@
     <title>{% block title %}My Flask App{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
+        body { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        main {
+            margin: 30px 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
         .alert { padding: 10px; margin: 10px 0; border-radius: 4px; }
         .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
@@ -18,18 +37,18 @@
 <body>
     <header>
         <h1>Welcome to My Flask App</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('fruits') }}">Fruits</a></li>
-                <li><a href="{{ url_for('temps') }}">Temperatures</a></li>
-                <li><a href="{{ url_for('population') }}">Population Form</a></li>
-                <li><a href="{{ url_for('search') }}">Search Cities</a></li>
-                <li><a href="{{ url_for('view_all') }}">View All Cities</a></li>
-                <li><a href="{{ url_for('delete_city') }}">Delete City</a></li>
-                <li><a href="{{ url_for('plot_temps') }}">View Temperature Chart</a></li>
-            </ul>
-        </nav>
+        <!-- <nav> -->
+        <!--     <ul> -->
+        <!--         <li><a href="{{ url_for('home') }}">Home</a></li> -->
+        <!--         <li><a href="{{ url_for('fruits') }}">Fruits</a></li> -->
+        <!--         <li><a href="{{ url_for('temps') }}">Temperatures</a></li> -->
+        <!--         <li><a href="{{ url_for('plot_temps') }}">View Temperature Chart</a></li> -->
+        <!--         <li><a href="{{ url_for('population') }}">Add City - Population Form</a></li> -->
+        <!--         <li><a href="{{ url_for('view_all') }}">View All Cities</a></li> -->
+        <!--         <li><a href="{{ url_for('search') }}">Search Cities</a></li> -->
+        <!--         <li><a href="{{ url_for('delete_city') }}">Delete City</a></li> -->
+        <!--     </ul> -->
+        <!-- </nav> -->
     </header>
     <main>
         {% block content %}
@@ -37,7 +56,9 @@
         {% endblock %}
     </main>
     <footer>
-        <p>&copy; 2024 My Flask App. All rights reserved.</p>
+        <p>&copy; 2026 Keith's Software Development Project.</p>
+        <p>Github: <a href="https://github.com/whalelogic/csc330" target="_blank">WhaleLogic</p>
+        <p>Google Docs - Group Project Notes <a href="https://docs.google.com/document/d/1fmkC9hDmg7PS3OimBRIekq2CCeVdnl03iyltH5uqu2E/edit?tab=t.0"></p>
     </footer>
 </body>
 </html>
