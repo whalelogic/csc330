@@ -1,34 +1,53 @@
-// search population db. 
-// this is a tempalte fragement
+{% extends "base.html" %}
 
-<div class="container">
-    <h1>Search Population Database</h1>
-    <form method="POST" action="/search">
-        <div class="form-group">
-            <label for="country">Country:</label>
-            <input type="text" class="form-control" id="country" name="country" placeholder="Enter country name">
+{% block title %}Search Cities{% endblock %}
+
+{% block content %}
+    <h1>Search for City Population</h1>
+    
+    <form method="POST" action="{{ url_for('search') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            {{ form.city.label }}
+            {{ form.city(size=32, placeholder="Enter city name") }}
+            {% if form.city.errors %}
+                <ul class="errors">
+                {% for error in form.city.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
+        
+        <div>
+            {{ form.submit() }}
+        </div>
     </form>
-    {% if cities %}
-    <h2>Search Results:</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>City</th>
-                <th>Country</th>
-                <th>Population</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in city_info %}
-            <tr>
-                <td>{{ result.city }}</td>
-                <td>{{ result.country }}</td>
-                <td>{{ result.population }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    
+    {% if city %}
+        <h2>Search Results:</h2>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Population</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.country }}</td>
+                    <td>{{ "{:,}".format(city.population) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% elif request.method == 'POST' %}
+        <p>No city found with that name.</p>
     {% endif %}
-</div>
+    
+    <p><a href="{{ url_for('population') }}">Add More Cities</a></p>
+    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+{% endblock %}
+

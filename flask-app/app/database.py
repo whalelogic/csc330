@@ -27,7 +27,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 city TEXT NOT NULL UNIQUE,
                 population INTEGER NOT NULL,
-                country TEXT NOT NULL UNIQUE
+                country TEXT
             )
         ''')
         conn.commit()

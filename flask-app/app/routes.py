@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import PopulationForm
-from app import city_data, database
+from app.forms import PopulationForm, SearchForm, DeleteCityForm
+from app import cities, database
 from app.city import City
 import os
 import requests
@@ -21,6 +21,7 @@ def get_weather_data():
         except:
             results[city] = 0
     return results
+
 
 
 def init_app(app):
@@ -62,50 +63,79 @@ def init_app(app):
             population_count = form.population.data
             country_name = form.country.data
             
-            if database.insert_city(city_name, population_count, country_name):
-                flash(f'Successfully added/updated {city_name}!', 'success')
-            else:
-                flash('Error adding city to database.', 'error')
+            # In-memory version (uncomment for in-memory)
+            # city_obj = City(city_name, population_count, country_name)
+            # cities.append(city_obj)
+            
+            # Database version (comment out for in-memory)
+            database.insert_city(city_name, population_count, country_name)
             
             return redirect(url_for('population'))
         
-        # Get all cities from database
-        cities = database.get_all_cities()
-        return render_template('population.html', form=form, cities=cities, population_data=city_data, title="Population Dashboard")
+        return render_template('population.html', form=form, title="Population Dashboard")
 
 
 
-    @app.route('/population/delete/<int:city_id>', methods=['POST'])
-    def delete_population(city_id):
-        if database.delete_city(city_id):
-            flash('City deleted successfully!', 'success')
-        else:
-            flash('Error deleting city.', 'error')
-        return redirect(url_for('population'))
 
 
 
-    @app.route('/cities', methods=['GET', 'POST'])
-    def cities():
-        form = PopulationForm()
+
+    @app.route('/view_all')
+    def view_all():
+        # In-memory version (uncomment for in-memory)
+        # city_objects = cities
+        
+        # Database version (comment out for in-memory)
+        db_cities = database.get_all_cities()
+        city_objects = [City(row['city'], row['population'], row['country'] if row['country'] else '') for row in db_cities]
+        
+        return render_template('view_cities.html', cities=city_objects)
+
+
+    @app.route('/search', methods=['GET', 'POST'])
+    def search():
+        form = SearchForm()
+        city_found = None
+        
+        if form.validate_on_submit():
+            search_name = form.city.data
+            
+            # In-memory version (uncomment for in-memory)
+            # for city in cities:
+            #     if city.name.lower() == search_name.lower():
+            #         city_found = city
+            #         break
+            
+            # Database version (comment out for in-memory)
+            db_cities = database.get_all_cities()
+            for row in db_cities:
+                if row['city'].lower() == search_name.lower():
+                    city_found = City(row['city'], row['population'], row['country'] if row['country'] else '')
+                    break
+        
+        return render_template('search.html', form=form, city=city_found)
+
+
+    @app.route('/delete_city', methods=['GET', 'POST'])
+    def delete_city():
+        form = DeleteCityForm()
         
         if form.validate_on_submit():
             city_name = form.city.data
-            population_count = form.population.data
-            country_name = form.country.data
-            city_data[city_name] = population_count, country_name
-            return redirect(url_for('cities'))
+            
+            # In-memory version (uncomment for in-memory)
+            # for i, city in enumerate(cities):
+            #     if city.name.lower() == city_name.lower():
+            #         cities.pop(i)
+            #         break
+            
+            # Database version (comment out for in-memory)
+            db_cities = database.get_all_cities()
+            for row in db_cities:
+                if row['city'].lower() == city_name.lower():
+                    database.delete_city(row['id'])
+                    break
+            
+            return redirect(url_for('view_all'))
         
-        return render_template('cities.html', cities=city_data, form=form)
-
-
-    @app.route('/search/<city_name>', methods=['GET'])
-    def search(city_name):
-        cities = database.get_all_cities()
-        city_info = next((c for c in cities if c['city'] == city_name), None)
-        if city_info:
-            return render_template('search.html', city=city_info)
-        else:
-            flash(f'City "{city_name}" not found in database.', 'error')
-            return redirect(url_for('population'))
-
+        return render_template('delete_city.html', form=form)

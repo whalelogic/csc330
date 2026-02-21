@@ -5,7 +5,7 @@ from app.city import City
 
 load_dotenv('.flaskenv')
 
-city_data = {}
+cities = []
 
 def create_app():
     app = Flask(__name__)
