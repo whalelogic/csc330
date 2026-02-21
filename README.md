@@ -1,114 +1,140 @@
-# CSC 330: Software Design & Development — Spring 2026
+# Flask Web Application Development Guide
 
-## Team Project Proposal: Recipe Management System
+A comprehensive reference for building web applications with Flask, SQLite, Jinja2 templates, and modern deployment practices.
 
+## 📚 Table of Contents
 
-### Upcoming Milestones
+1. [Flask Basics & Project Setup](#flask-basics)
+2. [Flask CLI Commands](./documents/flask-cli.md)
+3. [Jinja2 Template Syntax](./documents/jinja-templates.md)
+4. [SQLite Database Integration](./documents/sqlite-integration.md)
+5. [Redis Caching](./documents/redis-cache.md)
+6. [User Authentication](./documents/authentication.md)
+7. [Subscription & Notifications](./documents/subscriptions-notifications.md)
+8. [Google Cloud Deployment](./documents/gcloud-deployment.md)
+9. [API Development](./documents/api-development.md)
 
-1.  **03/03:** Team meetings with instructor to discuss proposal and progress on SRS.
-    
-2.  **03/11:** Draft of SRS due by beginning of class.
-    
-3.  **03/11:** Team presentation of project proposal and SRS.
-    
+---
 
+## Flask Basics
 
-### Strategy to Develop a Great Proposal
+### Installation
 
--   **Read Thoroughly:** Each team member must read this document before brainstorming.
-    
--   **Brainstorming:** Bring notes, ideas, and questions to the first meeting.
-    
--   **Coordination:** Appoint one or two members to act as coordinators to synthesize ideas.
-    
--   **Iteration:** Great work results from iterative improvement. Start early.
-    
+```bash
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-### Background
+# Install Flask and common dependencies
+pip install flask flask-sqlalchemy flask-login redis flask-mail
+```
 
-In many households and small community organizations, the management of culinary knowledge—recipes, dietary restrictions, and meal planning—is often fragmented. Recipes are scattered across physical cards, bookmarked websites, and disparate email chains. This lack of centralization makes it difficult for families or small groups to collaborate on meal preparation, maintain consistency in "signature" dishes, or scale quantities for larger gatherings.
+### Minimal Flask Application
 
-Furthermore, as dietary needs become more complex (e.g., allergies, veganism, gluten-free requirements), a simple list of instructions is no longer sufficient. Modern culinary management requires a system that allows for collaborative versioning, where a **"Master Recipe"** can be adapted or **"forked"** for different needs.
+```python
+from flask import Flask, render_template, request, jsonify
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key-here'
 
-### Project Proposal: "The Open Kitchen" Recipe Box
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-You are charged with developing a collaborative recipe management system that addresses these organizational challenges.
+@app.route('/api/data', methods=['GET', 'POST'])
+def api_data():
+    if request.method == 'POST':
+        data = request.get_json()
+        return jsonify({'status': 'success', 'received': data})
+    return jsonify({'message': 'Hello from API'})
 
+if __name__ == '__main__':
+    app.run(debug=True)
+```
 
-#### **Minimum Required Functionality**
+### Project Structure
 
+```
+flask-app/
+├── app.py                 # Main application file
+├── config.py              # Configuration settings
+├── models.py              # Database models
+├── requirements.txt       # Python dependencies
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   └── components/
+└── instance/
+    └── database.db        # SQLite database
+```
 
-**1. Authenticated User Roles**
+---
 
--   **Contributor:** A regular user who can create, view, and "fork" recipes.
-    
--   **Curator (Administrator):** An administrative user who manages users, notification settings, and unit lookup lists (grams, ounces, etc.).
-    
+## Quick Reference Links
 
-**2. Recipe Types & Data Requirements**
+- **[Flask CLI Commands & Usage](./documents/flask-cli.md)** - Complete guide to Flask command-line interface
+- **[Jinja2 Templates](./documents/jinja-templates.md)** - Template syntax, filters, and dynamic content
+- **[SQLite Integration](./documents/sqlite-integration.md)** - Database setup, queries, and Python functions
+- **[Redis Caching](./documents/redis-cache.md)** - In-memory caching strategies
+- **[User Authentication](./documents/authentication.md)** - Login, sessions, and password management
+- **[Subscriptions & Notifications](./documents/subscriptions-notifications.md)** - Email notifications and webhooks
+- **[Google Cloud Deployment](./documents/gcloud-deployment.md)** - VM setup and application management
+- **[API Development](./documents/api-development.md)** - RESTful API design and implementation
 
--   **Standard Recipe:** Requires ingredients, step-by-step instructions, prep/cook times, and tags (Nut-free, Keto, etc.).
-    
--   **Quick Tip:** A shorter entry focusing on a specific culinary hack or ingredient replacement.
-    
+---
 
-**3. Dynamic Ingredient Scaling**
+## Essential Flask Patterns
 
--   Users can input a **"Serving Size"**. The system must automatically recalculate ingredient quantities in the database view.
-    
+### Configuration Management
 
-**4. Recipe "Forking" & Versioning**
+```python
+# config.py
+import os
 
--   Users can "Fork" an existing recipe to their personal profile to make amendments while maintaining a link to the original.
-    
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/app.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    REDIS_URL = 'redis://localhost:6379/0'
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+```
 
-**5. Personalized Dashboard (The "My Kitchen" View)**
+### Error Handling
 
--   Centralized view of authored, forked, and saved recipes.
-    
+```python
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
 
-**6. Search and Filtering**
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+```
 
--   Filter by Category (Appetizer, Dessert), Dietary Tag, or Total Time.
-    
+### Request Context
 
-**7. Social Feedback Loop**
+```python
+from flask import request, session, g
 
--   Users can review recipes with a star rating and text comment.
-    
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user_id' in session:
+        g.user = User.query.get(session['user_id'])
+```
 
-**8. Automated Notifications**
+---
 
--   Email or notification mechanism to alert users of forks or comments.
-    
+## Contributing
 
-**9. Curator Reports**
+This guide is intended for CSC 330 students. Feel free to add examples and improve documentation.
 
--   Generate reports on "Most Forked" recipes, allergen safety audits, and user activity logs.
-    
+## License
 
-### Team Assignment Requirements
-
-Your proposal (2-3 pages) must address the following narrative elements:
-
-1.  **Project Motivation:** 1-2 sentence summary of the objective.
-    
-2.  **User Profiles:** Describe potential users and usage scenarios.
-    
-3.  **User Stories:** Define 12-15 user stories using the template: _As a <type of user>, I would like to <action> so that I can <goal>._
-    
-4.  **Core Features:** List and describe the system features.
-    
-5.  **Work Plan:** Define 3 successive phases (sprints) for implementation.
-    
-6.  **Metrics:** Identify metrics to measure success (e.g., manual process vs. systemic solution).
-    
-
-### Submission Instructions
-
--   **Format:** Collaborate via Google Docs, export as **PDF**.
-    
--   **Attribution:** Include names of all contributing team members at the top.
-    
--   **Requirement:** Every team member must submit their own copy of the PDF in Teams.
+Educational use only - CSC 330 Spring 2026
