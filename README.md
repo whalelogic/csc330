@@ -2,6 +2,7 @@
 
 ## Team Project Proposal: Recipe Management System
 
+
 ### Upcoming Milestones
 
 1.  **03/03:** Team meetings with instructor to discuss proposal and progress on SRS.
@@ -11,37 +12,6 @@
 3.  **03/11:** Team presentation of project proposal and SRS.
     
 
-### Team Selection
-
-The following **6 teams** have been assigned:
-
-Team Name
-
-Members
-
-**Frontend Devs**
-
-Patrick, Isaiah, Francis
-
-**The Champions**
-
-Noah, Tasnim, Ean
-
-**Copy+Paste**
-
-Javan, Zach, Chizindu
-
-**Error 404**
-
-Hans, Dheylin, Benjamin
-
-**The CCs**
-
-Allie, Max, Jessica
-
-**110**
-
-Keith, Camila, Kevin, Raeann
 
 ### Strategy to Develop a Great Proposal
 
@@ -60,11 +30,14 @@ In many households and small community organizations, the management of culinary
 
 Furthermore, as dietary needs become more complex (e.g., allergies, veganism, gluten-free requirements), a simple list of instructions is no longer sufficient. Modern culinary management requires a system that allows for collaborative versioning, where a **"Master Recipe"** can be adapted or **"forked"** for different needs.
 
+
 ### Project Proposal: "The Open Kitchen" Recipe Box
 
 You are charged with developing a collaborative recipe management system that addresses these organizational challenges.
 
+
 #### **Minimum Required Functionality**
+
 
 **1. Authenticated User Roles**
 
