@@ -3,10 +3,11 @@
 {% block title %}View All Cities{% endblock %}
 
 {% block content %}
+<div class="container">
     <h1>All Cities</h1>
     
     {% if cities %}
-        <table border="1" cellpadding="10" cellspacing="0">
+        <table>
             <thead>
                 <tr>
                     <th>City</th>
@@ -25,9 +26,12 @@
             </tbody>
         </table>
     {% else %}
-        <p>No cities added yet. Go to the Population form to add cities.</p>
+        <p style="text-align: center; color: #666; margin: 20px 0;">No cities added yet. Go to the Population form to add cities.</p>
     {% endif %}
     
-    <p><a href="{{ url_for('population') }}">Add More Cities</a></p>
-    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+    <div class="content-links">
+        <a href="{{ url_for('population') }}">Add More Cities</a>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+    </div>
+</div>
 {% endblock %}

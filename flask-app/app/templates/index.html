@@ -1,13 +1,14 @@
-
 {% extends "base.html" %}
 
 {% block title %}Home - My Flask App{% endblock %}
 
 {% block content %}
+<div class="container">
     <h2>Home Page</h2>
     
-    <h3>Available Routes:</h3>
-    <div style="margin: 20px 0;">
+    <div class="content-card">
+        <h3>Available Routes</h3>
+        
         <h4>Weather Features</h4>
         <ul>
             <li><a href="{{ url_for('temps') }}">View Temperatures</a> - City temperatures</li>
@@ -27,4 +28,5 @@
             <li><a href="{{ url_for('fruits') }}">Random Fruit</a> - Get a random fruit</li>
         </ul>
     </div>
+</div>
 {% endblock %}

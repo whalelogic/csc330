@@ -3,6 +3,7 @@
 {% block title %}Delete City{% endblock %}
 
 {% block content %}
+<div class="container">
     <h1>Delete City</h1>
     
     <form method="POST" action="{{ url_for('delete_city') }}">
@@ -10,7 +11,7 @@
         
         <div>
             {{ form.city.label }}
-            {{ form.city(size=32, placeholder="Enter city name to delete") }}
+            {{ form.city(placeholder="Enter city name to delete") }}
             {% if form.city.errors %}
                 <ul class="errors">
                 {% for error in form.city.errors %}
@@ -25,6 +26,9 @@
         </div>
     </form>
     
-    <p><a href="{{ url_for('view_all') }}">View All Cities</a></p>
-    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+    <div class="content-links">
+        <a href="{{ url_for('view_all') }}">View All Cities</a>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+    </div>
+</div>
 {% endblock %}

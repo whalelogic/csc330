@@ -3,6 +3,7 @@
 {% block title %}Population Database{% endblock %}
 
 {% block content %}
+<div class="container">
     <h1>City Population Form</h1>
     
     <h2>Add City</h2>
@@ -11,7 +12,7 @@
         
         <div>
             {{ form.city.label }}
-            {{ form.city(size=32, placeholder="Enter city name") }}
+            {{ form.city(placeholder="Enter city name") }}
             {% if form.city.errors %}
                 <ul class="errors">
                 {% for error in form.city.errors %}
@@ -23,7 +24,7 @@
         
         <div>
             {{ form.population.label }}
-            {{ form.population(size=32, placeholder="Enter population") }}
+            {{ form.population(placeholder="Enter population") }}
             {% if form.population.errors %}
                 <ul class="errors">
                 {% for error in form.population.errors %}
@@ -34,7 +35,7 @@
         </div>        
         <div>
             {{ form.country.label }}
-            {{ form.country(size=32, placeholder="Enter country name") }}
+            {{ form.country(placeholder="Enter country name") }}
             {% if form.country.errors %}
                 <ul class="errors">
                 {% for error in form.country.errors %}
@@ -49,6 +50,9 @@
         </div>
     </form>
     
-    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
-    <p><a href="{{ url_for('view_all') }}">View All Cities</a></p>
+    <div class="content-links">
+        <a href="{{ url_for('home') }}">Back to Home</a>
+        <a href="{{ url_for('view_all') }}">View All Cities</a>
+    </div>
+</div>
 {% endblock %}

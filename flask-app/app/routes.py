@@ -6,11 +6,14 @@ import os
 import requests
 import random
 
-# Constants for the weather dashboard
+
+# There is an SQlite database version that is currently commented out. This file runs as an in-memory version unless the db code is commented in, in which case they'll be both in-memory aand database running at the same time. 
+
 CITIES = ["San Diego", "New York", "Miami", "Las Vegas", "Seattle", "Denver", "New Haven"]
 
 
 def get_weather_data():
+    # This function uses the CITIES list above and is separate from the City class and database code. It is used in the /temps and /plot_temps routes to get weather data from the Open weather API.
     api_key = os.getenv('WEATHER_API_KEY')
     results = {}
     for city in CITIES:
@@ -27,19 +30,17 @@ def get_weather_data():
 def init_app(app):
     @app.route('/')
     def home():
-        return render_template('base.html', title="Weather Dashboard")
+        return render_template('index.html', title="Keith's Flask App")
 
 
     @app.route('/temps')
     def temps():
-        """Route 1: HTML List using Jinja2"""
         data = get_weather_data()
         return render_template('temps.html', weather_data=data)
 
 
     @app.route('/plot_temps')
     def plot_temps():
-        """Route 2: Chart.js visualization"""
         data = get_weather_data()
         return render_template('chart.html', 
                                labels=list(data.keys()), 
@@ -64,11 +65,11 @@ def init_app(app):
             country_name = form.country.data
             
             # In-memory version 
-            # city_obj = City(city_name, population_count, country_name)
-            # cities.append(city_obj)
+            city_obj = City(city_name, population_count, country_name)
+            cities.append(city_obj)
             
             # Database version (comment out for in-memory)
-            database.insert_city(city_name, population_count, country_name)
+            # database.insert_city(city_name, population_count, country_name)
             
             return redirect(url_for('population'))
         
@@ -78,12 +79,12 @@ def init_app(app):
 
     @app.route('/view_all')
     def view_all():
-        # In-memory version (uncomment for in-memory)
-        # city_objects = cities
+        # In-memory version 
+        city_objects = cities
         
-        # Database version (comment out for in-memory)
-        db_cities = database.get_all_cities()
-        city_objects = [City(row['city'], row['population'], row['country'] if row['country'] else '') for row in db_cities]
+        # Database version (comment out to use in-memory version)
+        # db_cities = database.get_all_cities()
+        # city_objects = [City(row['city'], row['population'], row['country'] if row['country'] else '') for row in db_cities]
         
         return render_template('view_cities.html', cities=city_objects)
 
@@ -97,17 +98,17 @@ def init_app(app):
             search_name = form.city.data
             
             # In-memory version (uncomment for in-memory)
-            # for city in cities:
-            #     if city.name.lower() == search_name.lower():
-            #         city_found = city
-            #         break
+            for city in cities:
+                if city.name.lower() == search_name.lower():
+                    city_found = city
+                    break
             
             # Database version (comment out for in-memory)
-            db_cities = database.get_all_cities()
-            for row in db_cities:
-                if row['city'].lower() == search_name.lower():
-                    city_found = City(row['city'], row['population'], row['country'] if row['country'] else '')
-                    break
+            # db_cities = database.get_all_cities()
+            # for row in db_cities:
+            #     if row['city'].lower() == search_name.lower():
+            #         city_found = City(row['city'], row['population'], row['country'] if row['country'] else '')
+            #         break
         
         return render_template('search.html', form=form, city=city_found)
 
@@ -120,17 +121,17 @@ def init_app(app):
             city_name = form.city.data
             
             # In-memory version (uncomment for in-memory)
-            # for i, city in enumerate(cities):
-            #     if city.name.lower() == city_name.lower():
-            #         cities.pop(i)
-            #         break
+            for i, city in enumerate(cities):
+                if city.name.lower() == city_name.lower():
+                    cities.pop(i)
+                    break
             
             # Database version (comment out for in-memory)
-            db_cities = database.get_all_cities()
-            for row in db_cities:
-                if row['city'].lower() == city_name.lower():
-                    database.delete_city(row['id'])
-                    break
+            # db_cities = database.get_all_cities()
+            # for row in db_cities:
+            #     if row['city'].lower() == city_name.lower():
+            #         database.delete_city(row['id'])
+            #         break
             
             return redirect(url_for('view_all'))
         
